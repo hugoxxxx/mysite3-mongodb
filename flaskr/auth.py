@@ -5,8 +5,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 from pymongo import MongoClient
-
-
+from bson.objectid import ObjectId
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -36,7 +35,7 @@ def register():
 
         if error is None:
             password = encrypt_passowrd(password)
-            db.user.insert_one({"username":username, "password":password})
+            db.user.insert_one({"username": username, "password": password})
             return redirect(url_for('auth.login'))
 
         flash(error)
@@ -51,7 +50,7 @@ def login():
         password = request.form['password']
         db = MongoClient().test_database
         error = None
-        user = db.user.find_one({"username":username})
+        user = db.user.find_one({"username": username})
 
         if user is None:
             error = 'Incorrect username.'
@@ -60,7 +59,7 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['_id']
+            session['user_id'] = str(user['_id'])
             return redirect(url_for('index'))
 
         flash(error)
@@ -75,4 +74,21 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = MongoClient().test_database.user.find_one({"_id": user_id})
+        g.user = MongoClient().test_database.user.find_one({"_id": ObjectId(user_id)})
+
+
+@bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+
+        return view(**kwargs)
+
+    return wrapped_view
