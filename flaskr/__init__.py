@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 
 
 def create_app(test_config=None):
@@ -10,11 +10,6 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
-
-    # bootstrap  sample
-    @app.route('/home')
-    def home():
-        return render_template('home.html', title_name='welcome')
 
     from . import auth
     app.register_blueprint(auth.bp)
