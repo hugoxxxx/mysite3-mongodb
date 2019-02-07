@@ -5,7 +5,7 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from pymongo import MongoClient, DESCENDING
-from datetime import  datetime
+from datetime import datetime
 from bson.objectid import ObjectId
 
 
