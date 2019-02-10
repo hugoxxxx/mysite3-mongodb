@@ -82,13 +82,3 @@ def delete(id):
     get_post(id)
     db.blog.article.delete_one({"_id": ObjectId(id)})
     return redirect(url_for('blog.index'))
-
-
-@bp.route('/table')
-def table():
-    mycol = list(db.table.find(projection={'_id': False}))
-    lable = mycol[0].keys()
-    content = mycol
-    n = len(content)
-
-    return render_template('blog/table.html', lable=lable, content=content, n=n)
