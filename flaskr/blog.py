@@ -7,6 +7,9 @@ from flaskr.auth import login_required
 from pymongo import MongoClient, DESCENDING
 from datetime import datetime
 from bson.objectid import ObjectId
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, PasswordField
+from wtforms.validators import DataRequired, Length, Email
 
 
 bp = Blueprint('blog', __name__)
@@ -84,11 +87,22 @@ def delete(id):
     return redirect(url_for('blog.index'))
 
 
-@bp.route('/table')
+# 表格测试网页
+
+class Form(FlaskForm):
+    username = StringField(u'用户名', validators=[DataRequired(message=u'用户名不能为空'), Length(1, 64)])
+    submit = SubmitField(u'提交')
+
+
+@bp.route('/table', methods=('GET', 'POST'))
 def table():
+    form = Form()
     mycol = list(db.table.find(projection={'_id': False}))
     lable = mycol[0].keys()
     content = mycol
     n = len(content)
+    if request.method == "POST":
+        if request.form['submit'] == 'submit':
+            return redirect(url_for('blog.index'))
 
     return render_template('blog/table.html', lable=lable, content=content, n=n)

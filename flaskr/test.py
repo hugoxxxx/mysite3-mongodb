@@ -21,7 +21,7 @@ class MultiCheckboxFIeld(SelectMultipleField):
     option_widget = CheckboxInput()
 
 
-class MStest(FlaskForm):
+class MultiCheckbox(FlaskForm):
     label = MultiCheckboxFIeld(u'lable')
     submit = SubmitField(u'提交')
 
@@ -30,7 +30,7 @@ class MStest(FlaskForm):
 def lable():
     mycol = list(db.table.find(projection={'_id': False}))
     lable = mycol[0].keys()
-    form = MStest(obj=lable)
+    form = MultiCheckbox(obj=lable)
     form.label.choices = [(choiceValue, choiceValue) for choiceValue in lable]
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -45,12 +45,21 @@ def lable():
 @bp.route('lablec')
 def lablec():
     lablec = session.get('lable_choice')
-    return render_template('test/lablec.html', lablec=lablec)
+    mycol = list(db.table.find(projection=lablec))
+    lable = list(mycol[0].keys())
+    content = mycol
+    m = len(lable)
+    n = len(content)
+    contentlist = []
+    for i in range(0, n):
+        contentlist.append(list(content[i].values()))
+    return render_template('test/lablec.html', lablec=lablec, mycol=mycol, lable=lable, n=n, m=m, contentlist=contentlist)
+
 
 @bp.route('/table')
 def table():
     mycol = list(db.table.find(projection={'_id': False}))
-    lable = mycol[0].keys()
+    lable = list(mycol[0].keys())
     content = mycol
     n = len(content)
     return render_template('test/table.html', lable=lable, content=content, n=n)
