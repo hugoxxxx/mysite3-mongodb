@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form, render_field, render_form_row %}
+{% block content %}
+{#    {% for i in lable %}#}
+{#        <label>#}
+{#        <input type="checkbox" name=name value={{ i }}>#}
+{#        {{ i }}#}
+{#        </label>#}
+{#    {% endfor %}#}
+{#    <input type="submit" value="提交">#}
+
+        {{ render_form(form) }}
+
+{% endblock content %}
