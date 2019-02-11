@@ -1,36 +1,15 @@
 {% extends 'base.html' %}
-{% from 'bootstrap/form.html' import render_form, render_field, render_form_row %}
+
+{% block header %}
+  <h1>{% block title %}Log In{% endblock %}</h1>
+{% endblock %}
 
 {% block content %}
-    {% block header %}
-        <h1>{% block title %}Log In{% endblock %}</h1>
-    {% endblock header %}
-{#    <h1>render_form</h1>#}
-    {{ render_form(form) }}
-
-{#    <h1>render_field</h1>#}
-{#    <form class="form" method="post">#}
-{#    {{ form.csrf_token }}#}
-{#    {{ render_field(form.username) }}#}
-{#    {{ render_field(form.password) }}#}
-{#    {{ render_field(form.submit) }}#}
-{#    </form>#}
-{% endblock content %}
-
-
-
-
-
-{#{% block header %}#}
-{#  <h1>{% block title %}Log In{% endblock %}</h1>#}
-{#{% endblock %}#}
-{##}
-{#{% block content %}#}
-{#  <form method="post">#}
-{#    <label for="username">Username</label>#}
-{#    <input name="username" id="username" required>#}
-{#    <label for="password">Password</label>#}
-{#    <input type="password" name="password" id="password" required>#}
-{#    <input type="submit" value="Log In">#}
-{#  </form>#}
-{#{% endblock %}#}
+  <form method="post">
+    <label for="username">Username</label>
+    <input name="username" id="username" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+    <input type="submit" value="Log In">
+  </form>
+{% endblock %}
